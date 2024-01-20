@@ -48,7 +48,7 @@ public class Chess extends Board {
         }
         switch (this.board[xInitial][yInitial] / 10) {
             case 1:
-                //pawn gets played here
+                // pawn gets played here
                 if (this.board[xInitial][yInitial] % 10 == 1) {
                     if (yInitial == 1) {
                         boolean yFinalIsNotLegal = true;
@@ -63,13 +63,14 @@ public class Chess extends Board {
                         } else {
                             this.movePiece(xInitial, yInitial, xFinal, yFinal);
                         }
-                    } else if (yFinal == 7 && yInitial+1 == yFinal) {
-                        //changing the piece type as it needs to be traded now
+                    } else if (yFinal == 7 && yInitial + 1 == yFinal) {
+                        // changing the piece type as it needs to be traded now
                         this.movePiece(xInitial, yInitial, xFinal, yFinal);
-                        Scanner s1=new Scanner(System.in);
-                        System.out.print("Enter the type of piece you would like to trade this pawn for\n(R, H, B, Q):");
-                        String input=s1.nextLine();
-                        switch(input){
+                        Scanner s1 = new Scanner(System.in);
+                        System.out
+                                .print("Enter the type of piece you would like to trade this pawn for\n(R, H, B, Q):");
+                        String input = s1.nextLine();
+                        switch (input) {
                             case "R":
                                 this.board[xFinal][yFinal] = 12;
                                 break;
@@ -89,18 +90,17 @@ public class Chess extends Board {
                         }
                         s1.close();
                     } else {
-                        if(yInitial+1 != yFinal){
+                        if (yInitial + 1 != yFinal) {
                             System.out.println("Illegal final position.");
                             return;
-                        }
-                        else{
+                        } else {
                             this.movePiece(xInitial, yInitial, xFinal, yFinal);
                         }
                     }
                 } else {
                     if (yInitial == 6) {
                         boolean yFinalIsNotLegal = true;
-                        for (int i = yInitial-2; i < yInitial; i++) {
+                        for (int i = yInitial - 2; i < yInitial; i++) {
                             if (i == yFinal) {
                                 yFinalIsNotLegal = false;
                             }
@@ -111,13 +111,14 @@ public class Chess extends Board {
                         } else {
                             this.movePiece(xInitial, yInitial, xFinal, yFinal);
                         }
-                    } else if (yFinal == 0 && yInitial-1 == yFinal) {
-                        //changing the piece type as it needs to be traded now
+                    } else if (yFinal == 0 && yInitial - 1 == yFinal) {
+                        // changing the piece type as it needs to be traded now
                         this.movePiece(xInitial, yInitial, xFinal, yFinal);
-                        Scanner s1=new Scanner(System.in);
-                        System.out.print("Enter the type of piece you would like to trade this pawn for\n(R, H, B, Q):");
-                        String input=s1.nextLine();
-                        switch(input){
+                        Scanner s1 = new Scanner(System.in);
+                        System.out
+                                .print("Enter the type of piece you would like to trade this pawn for\n(R, H, B, Q):");
+                        String input = s1.nextLine();
+                        switch (input) {
                             case "R":
                                 this.board[xFinal][yFinal] = 12;
                                 break;
@@ -137,67 +138,130 @@ public class Chess extends Board {
                         }
                         s1.close();
                     } else {
-                        if(yInitial-1 != yFinal){
+                        if (yInitial - 1 != yFinal) {
                             System.out.println("Illegal final position.");
                             return;
-                        }
-                        else{
+                        } else {
                             this.movePiece(xInitial, yInitial, xFinal, yFinal);
                         }
                     }
                 }
                 break;
             case 2:
-                //rook here
-                boolean isValidFinalPosition=false;
-                for (int i = Math.min(xInitial, xFinal); i <= Math.max(xInitial, xFinal); i++) {
-                    if(this.board[i][yInitial] == this.board[xFinal][yFinal] && this.board[xFinal][yFinal]/10 != this.board[xInitial][yInitial]/10) {
-                        isValidFinalPosition=true;
-                    }
-                }
-                for (int i = Math.min(yInitial, yFinal); i <= Math.max(yInitial, yFinal); i++) {
-                    if(this.board[xInitial][i] == this.board[xFinal][yFinal] && this.board[xFinal][yFinal]/10 != this.board[xInitial][yInitial]/10) {
-                        isValidFinalPosition=true;
-                    }
-                }
-                for (int i = Math.min(xInitial, xFinal)+1; i < Math.max(xInitial, xFinal); i++) {
-                    if(this.board[i][yInitial] != 0){
-                        isValidFinalPosition=false;
-                    }
-                }
-                for (int i = Math.min(yInitial, yFinal)+1; i < Math.max(yInitial, yFinal); i++) {
-                    if(this.board[xInitial][i] != 0){
-                        isValidFinalPosition=false;
-                    }
-                }
-                if(isValidFinalPosition){
+                // rook here
+                if(this.crossPatternChecker(xInitial, yInitial, xFinal, yFinal)) {
                     this.movePiece(xInitial, yInitial, xFinal, yFinal);
-                } else{
-                    System.out.println("Invalid final position.");
+                } else {
+                    System.out.println("Invalid move.");
                     return;
                 }
                 break;
             case 3:
-                //knight (H/Horse) here
+                // knight (H/Horse) here
 
                 break;
             case 4:
-                //bishop here
-
+                // bishop here
+                if(this.xPatternChecker(xInitial, yInitial, xFinal, yFinal)){
+                    this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                } else{
+                    System.out.println("Invalid move.");
+                    return;
+                }
                 break;
             case 5:
-                //queen here
-
+                // queen here
+                if(this.crossPatternChecker(xInitial, yInitial, xFinal, yFinal)||this.xPatternChecker(xInitial, yInitial, xFinal, yFinal)){
+                    this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                } else{
+                    System.out.println("Invalid move.");
+                    return;
+                }
                 break;
             case 6:
-                //king here
-
+                // king here
+                
                 break;
             default:
                 System.out.println("Invalid chess piece type given at X: " + xInitial + "(" + xInitialLetter + ")"
                         + " Y: " + yInitial + "\nin the playPiece function.");
                 return;
         }
+    }
+
+    public boolean xPatternChecker(int xInitial, int yInitial, int xFinal, int yFinal) {
+        boolean isValidFinalPosition=true;
+        if(Math.abs(xInitial-xFinal) == Math.abs(yInitial-yFinal)) {
+            //there are 4 diagonal directions the piece could move in the x pattern. You need to think of all 4 of them.
+            if(xInitial<xFinal&&yInitial<yFinal){
+                //the piece is moving diagonally right and down
+                for(int i=xInitial+1, j=yInitial+1 ; i<xFinal && j<yFinal ; i++, j++){
+                    if(this.board[i][j] != 0){
+                        isValidFinalPosition=false;
+                    }
+                }
+            } else if(xInitial<xFinal&&yInitial>yFinal){
+                //the piece is moving diagonally right and up
+                for(int i=xInitial+1, j=yFinal-1 ; i<xFinal && j>yInitial ; i++, j--){
+                    if(this.board[i][j] != 0){
+                        isValidFinalPosition=false;
+                    }
+                }
+            } else if(xInitial>xFinal&&yInitial<yFinal){
+                //the piece is moving diagonally left and down
+                for(int i=xFinal-1, j=yInitial+1 ; i>xInitial && j<yFinal ; i--, j++){
+                    if(this.board[i][j] != 0){
+                        isValidFinalPosition=false;
+                    }
+                }
+            } else if(xInitial>xFinal&&yInitial>yFinal){
+                //the piece is moving diagonally left and up
+                for(int i=xFinal-1, j=yFinal-1 ; i>xInitial && j>yInitial ; i--, j--){
+                    if(this.board[i][j] != 0){
+                        isValidFinalPosition=false;
+                    }
+                }
+            }
+        } else{
+            isValidFinalPosition=false;
+        }
+        if(this.board[xFinal][yFinal]/10 == this.board[xInitial][yInitial]/10){
+            isValidFinalPosition=false;
+        }
+        return isValidFinalPosition;
+    }
+
+    public boolean crossPatternChecker(int xInitial, int yInitial, int xFinal, int yFinal) {
+        boolean isValidFinalPosition = false;
+        boolean isMovingOnX=false;
+        boolean isMovingOnY=false;
+        for (int i = Math.min(xInitial, xFinal); i <= Math.max(xInitial, xFinal); i++) {
+            if (this.board[i][yInitial] == this.board[xFinal][yFinal] && this.board[xFinal][yFinal] / 10 != this.board[xInitial][yInitial] / 10) {
+                isValidFinalPosition = true;
+                isMovingOnX=true;
+            }
+        }
+        for (int i = Math.min(yInitial, yFinal); i <= Math.max(yInitial, yFinal); i++) {
+            if (this.board[xInitial][i] == this.board[xFinal][yFinal] && this.board[xFinal][yFinal] / 10 != this.board[xInitial][yInitial] / 10) {
+                isValidFinalPosition = true;
+                isMovingOnY=true;
+            }
+        }
+        if(isMovingOnX){
+            for (int i = Math.min(xInitial, xFinal) + 1; i < Math.max(xInitial, xFinal); i++) {
+                if (this.board[i][yInitial] != 0) {
+                    isValidFinalPosition = false;
+                }
+            }
+        }
+        if(isMovingOnY){
+            for (int i = Math.min(yInitial, yFinal) + 1; i < Math.max(yInitial, yFinal); i++) {
+                if (this.board[xInitial][i] != 0) {
+                    isValidFinalPosition = false;
+                }
+            }
+        }
+        return isValidFinalPosition;
     }
 
     public static int letterToNumberCoordinateConverter(String letter) {
