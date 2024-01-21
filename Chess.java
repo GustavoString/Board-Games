@@ -947,7 +947,8 @@ public class Chess extends Board {
                         break;
                 }
             }
-            System.out.println();
+            System.out.println("  " + (i+1));
         }
+        System.out.println("\n    A B C D E F G H");
     }
 }
