@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Chess extends Board {
@@ -193,8 +194,7 @@ public class Chess extends Board {
                 }
                 break;
             default:
-                System.out.println("Invalid chess piece type given at X: " + xInitial + "(" + xInitialLetter + ")"
-                        + " Y: " + yInitial + "\nin the playPiece function.");
+                System.out.println("Invalid chess piece type given at X: " + xInitial + "(" + xInitialLetter + ")" + " Y: " + yInitial + "\nin the playPiece function.");
                 return;
         }
     }
@@ -361,6 +361,189 @@ public class Chess extends Board {
                 System.out.println("Error: Invalid input at the letterToNumberCoordinateConverter function.");
                 return 8;
         }
+    }
+
+    public boolean checkmateChecker(boolean isRed){
+        boolean isCheckmate=true;
+        Coordinate king=new Coordinate(0, 0);
+        if(isRed){
+            for (int j = 0; j < this.board.length; j++) {
+                for (int i = 0; i < this.board[j].length; i++) {
+                    if(this.board[i][j] == 16){
+                        king.setCoordinate(i, j);
+                    }
+                }
+            }
+        } else{
+            for (int j = 0; j < this.board.length; j++) {
+                for (int i = 0; i < this.board[j].length; i++) {
+                    if(this.board[i][j] == 26){
+                        king.setCoordinate(i, j);
+                    }
+                }
+            }
+        }
+        Coordinate[] possibleKingMoves=Chess.possibleKingMovesFinder(king);
+
+        return isCheckmate;
+    }
+
+    public Coordinate[] possibleEnemyMovesFinder(boolean isRed){
+        //check if the coordinates on the move pattern other than the piece in question's own coordinate are empty and if they are add those coordinates to possibleMoves
+        int teamType;
+        if(isRed){
+            teamType=2;
+        } else{
+            teamType=1;
+        }
+        ArrayList<ChessPiece> pieces=new ArrayList<>();
+        for (int j = 0; j < this.board.length; j++) {
+            for (int i = 0; i < this.board[i].length; i++) {
+                if(this.board[i][j]/10 == teamType){
+                    ChessPiece temp=new ChessPiece(i, j, this.board[i][j]%10);
+                    pieces.add(temp);
+                }
+            }
+        }
+        ArrayList<Coordinate> possibleMoves=new ArrayList<>();
+        for (int i = 0; i < pieces.size(); i++) {
+            switch(pieces.get(i).pieceType){
+                case 1:
+                    //pawn
+                    if(teamType==1){
+                        if(pieces.get(i).y == 1){
+                            Coordinate temp=new Coordinate(pieces.get(i).x, pieces.get(i).y+1);
+                            possibleMoves.add(temp);
+                            temp.setCoordinate(pieces.get(i).x, pieces.get(i).y+2);
+                            possibleMoves.add(temp);
+                        } else{
+                            Coordinate temp=new Coordinate(pieces.get(i).x, pieces.get(i).y+1);
+                            possibleMoves.add(temp);
+                        }
+                    } else{
+                        if(pieces.get(i).y == 6){
+                            Coordinate temp=new Coordinate(pieces.get(i).x, pieces.get(i).y-1);
+                            possibleMoves.add(temp);
+                            temp.setCoordinate(pieces.get(i).x, pieces.get(i).y-2);
+                            possibleMoves.add(temp);
+                        } else{
+                            Coordinate temp=new Coordinate(pieces.get(i).x, pieces.get(i).y-1);
+                            possibleMoves.add(temp);
+                        }
+                    }
+                    break;
+                case 2:
+                    //rook
+                    //start of cross pattern checker
+                    boolean terminateX=false;
+                    if(pieces.get(i).x-1>=0){
+                        for (int j = pieces.get(i).x-1 ; j >= 0 && !terminateX; j--) {
+                            if(this.board[j][pieces.get(i).y] != 0){
+                                terminateX=true;
+                            } else{
+                                Coordinate temp=new Coordinate(j, pieces.get(i).y);
+                                possibleMoves.add(temp);
+                            }
+                        }
+                    }
+                    terminateX=false;
+                    if(pieces.get(i).x+1<8){
+                        for (int j = pieces.get(i).x+1 ; j < 8 && !terminateX; j++) {
+                            if(this.board[j][pieces.get(i).y] != 0){
+                                terminateX=true;
+                            } else{
+                                Coordinate temp=new Coordinate(j, pieces.get(i).y);
+                                possibleMoves.add(temp);
+                            }
+                        }
+                    }
+                    boolean terminateY=false;
+                    if(pieces.get(i).y-1>=0){
+                        for (int j = pieces.get(i).y-1 ; j >= 0 && !terminateY; j--) {
+                            if(this.board[pieces.get(i).x][j] != 0){
+                                terminateY=true;
+                            } else{
+                                Coordinate temp=new Coordinate(pieces.get(i).x, j);
+                                possibleMoves.add(temp);
+                            }
+                        }
+                    }
+                    terminateY=false;
+                    if(pieces.get(i).y+1<8){
+                        for (int j = pieces.get(i).y+1 ; j < 8 && !terminateY; j++) {
+                            if(this.board[pieces.get(i).x][j] != 0){
+                                terminateY=true;
+                            } else{
+                                Coordinate temp=new Coordinate(pieces.get(i).x, j);
+                                possibleMoves.add(temp);
+                            }
+                        }
+                    }
+                    //end of cross pattern checker
+                    break;
+                case 3:
+                    //knight
+
+                    break;
+                case 4:
+                    //bishop
+                    //start of x pattern checker
+                    //make sure you include terminate booleans to terminate the checker if it comes across a piece (enemy of friendly) in that direction.
+
+                    //end of x pattern checker
+                    break;
+                case 5:
+                    //queen
+                    //copy paste cross pattern checker from rook and x pattern checker from bishop below
+
+                    break;
+                case 6:
+                    //king
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public static Coordinate[] possibleKingMovesFinder(Coordinate king){
+        ArrayList <Coordinate> kingMoves=new ArrayList<>();
+        Coordinate temp=new Coordinate(king.x-1, king.y);
+        kingMoves.add(temp);
+        temp.setCoordinate(king.x-1, king.y-1);
+        kingMoves.add(temp);
+        temp.setCoordinate(king.x, king.y-1);
+        kingMoves.add(temp);
+        temp.setCoordinate(king.x+1, king.y-1);
+        kingMoves.add(temp);
+        temp.setCoordinate(king.x+1, king.y);
+        kingMoves.add(temp);
+        temp.setCoordinate(king.x+1, king.y+1);
+        kingMoves.add(temp);
+        temp.setCoordinate(king.x, king.y+1);
+        kingMoves.add(temp);
+        temp.setCoordinate(king.x-1, king.y+1);
+        kingMoves.add(temp);
+        int length=0;
+        for (int i = 0; i < kingMoves.size(); i++) {
+            if(kingMoves.get(i).x<0 || kingMoves.get(i).x>7 || kingMoves.get(i).y<0 || kingMoves.get(i).y>7){
+
+            } else{
+                length++;
+            }
+        }
+        Coordinate[] ret=new Coordinate[length];
+        int j=0;
+        for (int i = 0; i < kingMoves.size(); i++) {
+            if(kingMoves.get(i).x<0 || kingMoves.get(i).x>7 || kingMoves.get(i).y<0 || kingMoves.get(i).y>7){
+
+            } else{
+                ret[j]=new Coordinate(kingMoves.get(i).x, kingMoves.get(i).y);
+                j++;
+            }
+        }
+        return ret;
     }
 
     public void boardPrinter() {
