@@ -28,4 +28,12 @@ public class Coordinate {
         this.x=x;
         this.y=y;
     }
+
+    public boolean equals(Coordinate c){
+        if(this.x == c.x && this.y == c.y){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
