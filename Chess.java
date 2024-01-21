@@ -47,9 +47,24 @@ public class Chess extends Board {
             case 1:
                 // pawn gets played here
                 if (this.board[xInitial][yInitial] / 10 == 1) {
-                    if((this.board[xInitial+1][yInitial-1] / 10 == 2 && xInitial+1 == xFinal && yInitial-1 == yFinal) || (this.board[xInitial-1][yInitial-1] / 10 == 2 && xInitial-1 == xFinal && yInitial-1 == yFinal)){
-                        this.movePiece(xInitial, yInitial, xFinal, yFinal);
-                    } else if (this.board[xFinal][yFinal]!=0) {
+                    if(xFinal == xInitial-1 || xFinal == xInitial+1) {
+                        if(xInitial+1 < 8 && xInitial-1 >= 0){
+                            if((this.board[xInitial+1][yInitial+1] / 10 == 2 && xInitial+1 == xFinal && yInitial+1 == yFinal) || (this.board[xInitial-1][yInitial+1] / 10 == 2 && xInitial-1 == xFinal && yInitial+1 == yFinal)){
+                                this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                            }
+                        } else if (xInitial+1 < 8){
+                            if(this.board[xInitial+1][yInitial+1] / 10 == 2 && xInitial+1 == xFinal && yInitial+1 == yFinal){
+                                this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                            }
+                        } else if (xInitial-1>=0){
+                            if(this.board[xInitial-1][yInitial+1] / 10 == 2 && xInitial-1 == xFinal && yInitial+1 == yFinal){
+                                this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                            }
+                        } else {
+                            System.out.println("Illegal final position. 123315");
+                            return;
+                        }
+                    } else if (this.board[xFinal][yFinal]!=0){
                         System.out.println("Illegal final position.");
                         return;
                     } else if (yInitial == 1) {
@@ -99,8 +114,20 @@ public class Chess extends Board {
                         }
                     }
                 } else {
-                    if((this.board[xInitial+1][yInitial+1] / 10 == 1 && xInitial+1 == xFinal && yInitial+1 == yFinal) || (this.board[xInitial-1][yInitial+1] / 10 == 1 && xInitial-1 == xFinal && yInitial+1 == yFinal)){
-                        this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                    if(xFinal == xInitial-1 || xFinal == xInitial +1) {
+                        if(xInitial+1 < 8 && xInitial-1 >= 0){
+                            if((this.board[xInitial+1][yInitial-1] / 10 == 1 && xInitial+1 == xFinal && yInitial-1 == yFinal) || (this.board[xInitial-1][yInitial-1] / 10 == 1 && xInitial-1 == xFinal && yInitial-1 == yFinal)){
+                                this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                            }
+                        } else if (xInitial+1 < 8){
+                            if(this.board[xInitial+1][yInitial-1] / 10 == 1 && xInitial+1 == xFinal && yInitial-1 == yFinal){
+                                this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                            }
+                        } else if (xInitial-1>=0){
+                            if(this.board[xInitial-1][yInitial-1] / 10 == 1 && xInitial-1 == xFinal && yInitial-1 == yFinal){
+                                this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                            }
+                        }
                     } else if (this.board[xFinal][yFinal]!=0) {
                         System.out.println("Illegal final position.");
                         return;
@@ -221,7 +248,7 @@ public class Chess extends Board {
                 isValidFinalPosition = true;
             }
         }
-        for (int i = xInitial-1, j = yInitial+1; i <= xInitial+1 && j <= yInitial-1 ; i++, j--) {
+        for (int i = xInitial-1, j = yInitial+1; i <= xInitial+1 && j >= yInitial-1 ; i++, j--) {
             if(xFinal == i && yFinal == j){
                 isValidFinalPosition = true;
             }

@@ -32,9 +32,9 @@ public class test {
             }
         }
         if(chessBoard.checkmateChecker(false)){
-            System.out.println("Green wins!");
-        } else if(chessBoard.checkmateChecker(true)){
             System.out.println("Red wins!");
+        } else if(chessBoard.checkmateChecker(true)){
+            System.out.println("Green wins!");
         } else {
             System.out.println("You either managed to draw or there is an error somewhere.\nMost likely the 2nd one.");
         }
