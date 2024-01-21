@@ -3,12 +3,16 @@ import java.util.Scanner;
 public class test {
     public static void main(String[] args) {
         Chess chessBoard=new Chess();
+        chessBoard.boardPrinter();
+        Scanner s1=new Scanner(System.in);
         while(!chessBoard.checkmateChecker(false) && !chessBoard.checkmateChecker(true)){
-            chessBoard.boardPrinter();
-            Scanner s1=new Scanner(System.in);
             System.out.print(Board.ANSI_RED+"\n--RED PLAYER TURN---\n\n"+Board.ANSI_RESET+"Please enter the coordinates of your move in the following format:\nXY-XY\n(Initial-Final):");
             int[] tempInt=coordinateConverter(s1.nextLine());
-            chessBoard.playPiece(tempInt[0], tempInt[1], tempInt[2], tempInt[3]);
+            if(pieceTeamChecker(chessBoard, true, tempInt[0], tempInt[1])){
+                chessBoard.playPiece(tempInt[0], tempInt[1], tempInt[2], tempInt[3]);
+            } else{
+                System.out.println("You should know better than playing a piece that isn't yours.");
+            }
             System.out.println();
             chessBoard.boardPrinter();
             if(chessBoard.checkmateChecker(false)){
@@ -16,14 +20,16 @@ public class test {
             }
             System.out.print(Board.ANSI_GREEN+"\n--GREEN PLAYER TURN---\n\n"+Board.ANSI_RESET+"Please enter the coordinates of your move in the following format:\nXY-XY\n(Initial-Final):");
             tempInt=coordinateConverter(s1.nextLine());
-            chessBoard.playPiece(tempInt[0], tempInt[1], tempInt[2], tempInt[3]);
+            if(pieceTeamChecker(chessBoard, false, tempInt[0], tempInt[1])){
+                chessBoard.playPiece(tempInt[0], tempInt[1], tempInt[2], tempInt[3]);
+            } else{
+                System.out.println("You should know better than playing a piece that isn't yours.");
+            }
             System.out.println();
             chessBoard.boardPrinter();
             if(chessBoard.checkmateChecker(true)){
                 break;
             }
-
-            s1.close();
         }
         if(chessBoard.checkmateChecker(false)){
             System.out.println("Green wins!");
@@ -31,6 +37,25 @@ public class test {
             System.out.println("Red wins!");
         } else {
             System.out.println("You either managed to draw or there is an error somewhere.\nMost likely the 2nd one.");
+        }
+        s1.close();
+    }
+
+    public static boolean pieceTeamChecker(Chess chessBoard, boolean isRed, int xInitial, int yInitial){
+        if(isRed){
+            if(chessBoard.board[xInitial][yInitial]/10 == 1 || chessBoard.board[xInitial][yInitial]/10 == 0){
+                return true;
+            }
+            else {
+                return false;
+            }
+        } else{
+            if(chessBoard.board[xInitial][yInitial]/10 == 2 || chessBoard.board[xInitial][yInitial]/10 == 0){
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
 

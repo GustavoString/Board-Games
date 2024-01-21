@@ -43,13 +43,13 @@ public class Chess extends Board {
             System.out.println("Invalid final position:\nYou cannot capture your own pieces.");
             return;
         }
-        switch (this.board[xInitial][yInitial] / 10) {
+        switch (this.board[xInitial][yInitial] % 10) {
             case 1:
                 // pawn gets played here
-                if (this.board[xInitial][yInitial] % 10 == 1) {
+                if (this.board[xInitial][yInitial] / 10 == 1) {
                     if (yInitial == 1) {
                         boolean yFinalIsNotLegal = true;
-                        for (int i = yInitial; i < yInitial + 2; i++) {
+                        for (int i = yInitial+1; i <= yInitial + 2; i++) {
                             if (i == yFinal) {
                                 yFinalIsNotLegal = false;
                             }
