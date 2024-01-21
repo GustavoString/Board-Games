@@ -47,7 +47,12 @@ public class Chess extends Board {
             case 1:
                 // pawn gets played here
                 if (this.board[xInitial][yInitial] / 10 == 1) {
-                    if (yInitial == 1) {
+                    if((this.board[xInitial+1][yInitial-1] / 10 == 2 && xInitial+1 == xFinal && yInitial-1 == yFinal) || (this.board[xInitial-1][yInitial-1] / 10 == 2 && xInitial-1 == xFinal && yInitial-1 == yFinal)){
+                        this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                    } else if (this.board[xFinal][yFinal]!=0) {
+                        System.out.println("Illegal final position.");
+                        return;
+                    } else if (yInitial == 1) {
                         boolean yFinalIsNotLegal = true;
                         for (int i = yInitial+1; i <= yInitial + 2; i++) {
                             if (i == yFinal) {
@@ -64,8 +69,7 @@ public class Chess extends Board {
                         // changing the piece type as it needs to be traded now
                         this.movePiece(xInitial, yInitial, xFinal, yFinal);
                         Scanner s1 = new Scanner(System.in);
-                        System.out
-                                .print("Enter the type of piece you would like to trade this pawn for\n(R, H, B, Q):");
+                        System.out.print("Enter the type of piece you would like to trade this pawn for\n(R, H, B, Q):");
                         String input = s1.nextLine();
                         switch (input) {
                             case "R":
@@ -95,7 +99,12 @@ public class Chess extends Board {
                         }
                     }
                 } else {
-                    if (yInitial == 6) {
+                    if((this.board[xInitial+1][yInitial+1] / 10 == 1 && xInitial+1 == xFinal && yInitial+1 == yFinal) || (this.board[xInitial-1][yInitial+1] / 10 == 1 && xInitial-1 == xFinal && yInitial+1 == yFinal)){
+                        this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                    } else if (this.board[xFinal][yFinal]!=0) {
+                        System.out.println("Illegal final position.");
+                        return;
+                    } else if (yInitial == 6) {
                         boolean yFinalIsNotLegal = true;
                         for (int i = yInitial - 2; i < yInitial; i++) {
                             if (i == yFinal) {
