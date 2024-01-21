@@ -158,7 +158,12 @@ public class Chess extends Board {
                 break;
             case 3:
                 // knight (H/Horse) here
-
+                if(this.horsePatternChecker(xInitial, yInitial, xFinal, yFinal)){
+                    this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                } else{
+                    System.out.println("Invalid move.");
+                    return;
+                }
                 break;
             case 4:
                 // bishop here
@@ -180,13 +185,76 @@ public class Chess extends Board {
                 break;
             case 6:
                 // king here
-                
+                if(this.kingPatternChecker(xInitial, yInitial, xFinal, yFinal)){
+                    this.movePiece(xInitial, yInitial, xFinal, yFinal);
+                } else{
+                    System.out.println("Invalid move.");
+                    return;
+                }
                 break;
             default:
                 System.out.println("Invalid chess piece type given at X: " + xInitial + "(" + xInitialLetter + ")"
                         + " Y: " + yInitial + "\nin the playPiece function.");
                 return;
         }
+    }
+
+    public boolean kingPatternChecker(int xInitial, int yInitial, int xFinal, int yFinal){
+        boolean isValidFinalPosition=false;
+        for (int i = xInitial-1; i <= xInitial+1 ; i++) {
+            if(yInitial == yFinal && xFinal == i){
+                isValidFinalPosition=true;
+            }
+        }
+        for(int i = yInitial-1 ; i <= yInitial+1 ; i++){
+            if(xInitial == xFinal && yFinal == i){
+                isValidFinalPosition=true;
+            }
+        }
+        for (int i = xInitial-1, j = yInitial-1; i <= xInitial+1 && j <= yInitial+1 ; i++, j++) {
+            if(xFinal == i && yFinal == j){
+                isValidFinalPosition = true;
+            }
+        }
+        for (int i = xInitial-1, j = yInitial+1; i <= xInitial+1 && j <= yInitial-1 ; i++, j--) {
+            if(xFinal == i && yFinal == j){
+                isValidFinalPosition = true;
+            }
+        }
+        if(this.board[xInitial][yInitial]/10 == this.board[xFinal][yFinal]/10){
+            isValidFinalPosition=false;
+        }
+        if(xInitial == xFinal && yInitial == yFinal){
+            isValidFinalPosition=false;
+        }
+        return isValidFinalPosition;
+    }
+
+    public boolean horsePatternChecker(int xInitial, int yInitial, int xFinal, int yFinal){
+        boolean isValidFinalPosition=false;
+        //top
+        if((xInitial+1 == xFinal && yInitial-2 == yFinal) || (xInitial-1 == xFinal && yInitial-2 == yFinal)){
+            isValidFinalPosition=true;
+        }
+        //right
+        if((xInitial+2 == xFinal && yInitial-1 == yFinal) || (xInitial+2 == xFinal && yInitial+1 == yFinal)){
+            isValidFinalPosition=true;
+        }
+        //bottom
+        if((yInitial+2 == yFinal && xInitial+1 == xFinal) || (yInitial+2 == yFinal && xInitial-1 == xFinal)){
+            isValidFinalPosition=true;
+        }
+        //left
+        if((xInitial-2 == xFinal && yInitial+1 == yFinal) || (xInitial-2 == xFinal && yInitial-1 == yFinal)){
+            isValidFinalPosition=true;
+        }
+        if(this.board[xFinal][yFinal]/10 == this.board[xInitial][yInitial]){
+            isValidFinalPosition=false;
+        }
+        if(xInitial == xFinal && yInitial == yFinal){
+            isValidFinalPosition=false;
+        }
+        return isValidFinalPosition;
     }
 
     public boolean xPatternChecker(int xInitial, int yInitial, int xFinal, int yFinal) {
@@ -228,6 +296,9 @@ public class Chess extends Board {
         if(this.board[xFinal][yFinal]/10 == this.board[xInitial][yInitial]/10){
             isValidFinalPosition=false;
         }
+        if(xInitial == xFinal && yInitial == yFinal){
+            isValidFinalPosition=false;
+        }
         return isValidFinalPosition;
     }
 
@@ -260,6 +331,9 @@ public class Chess extends Board {
                     isValidFinalPosition = false;
                 }
             }
+        }
+        if(xInitial == xFinal && yInitial == yFinal){
+            isValidFinalPosition=false;
         }
         return isValidFinalPosition;
     }
